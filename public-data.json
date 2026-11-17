@@ -1,0 +1,11 @@
+{
+  "version": 3,
+  "managed": true,
+  "initialized": false,
+  "songs": [],
+  "condition": {
+    "title": "오늘의 컨디션을 확인해 주세요",
+    "body": "목 상태와 오늘 부르고 싶은 분위기를 공유해 보세요.",
+    "status": "🎙 컨디션 미설정"
+  }
+}

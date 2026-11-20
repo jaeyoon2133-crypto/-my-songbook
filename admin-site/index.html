@@ -429,6 +429,10 @@ body:has(.page-view[data-page="admin"].active) nav{display:none}
 .admin-dashboard-head p{margin:0;color:#95866f;font-size:13px}
 .admin-live{display:flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid #e9dfca;background:#fffdf7;border-radius:30px;color:#85734f;font-size:10px;font-weight:800;letter-spacing:.4px}
 .admin-live span{width:7px;height:7px;border-radius:50%;background:#78a77a;box-shadow:0 0 0 4px #78a77a20}
+.admin-dashboard-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.admin-exit-button{border:1px solid #e8d8b8;background:#fffaf0;color:#765b2d;border-radius:30px;padding:10px 14px;font-size:11px;font-weight:800;white-space:nowrap}
+.admin-exit-button:hover{background:#fff0c7}
+:root[data-theme="dark"] .admin-exit-button{background:#3b3021;border-color:#665236;color:#f3dba8}
 .admin-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}
 .admin-stat{min-height:116px;background:#fffdf8;border:1px solid #eee3ce;border-radius:17px;padding:17px 18px;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 4px 15px #745c2710}
 .admin-stat>span{font-size:9px;font-weight:850;letter-spacing:1.4px;color:#b29a6c}
@@ -477,6 +481,8 @@ body:has(.page-view[data-page="admin"].active) .fab{display:none}
  body:has(.page-view[data-page="admin"].active) header{margin:0 9px;padding:12px 13px}
  body:has(.page-view[data-page="admin"].active) .main{padding:20px 12px 28px}
  .admin-dashboard-head{align-items:flex-start;flex-direction:column;margin-bottom:16px}
+ .admin-dashboard-actions{width:100%;justify-content:space-between}
+ .admin-exit-button{padding:9px 11px}
  .admin-dashboard-head h2{font-size:23px}
  .admin-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
  .admin-stat{min-height:98px;padding:13px}
@@ -508,7 +514,10 @@ body:has(.page-view[data-page="admin"].active) .fab{display:none}
 <section class="page-view" data-page="admin">
 <div class="admin-dashboard-head">
   <div><div class="admin-kicker">GUGU SONGBOOK / CONTROL CENTER</div><h2>관리자 대시보드</h2><p>구구의 노래책과 커뮤니티를 한곳에서 관리해요.</p></div>
-  <div class="admin-live"><span></span> SUPABASE 연결 관리</div>
+  <div class="admin-dashboard-actions">
+    <div class="admin-live"><span></span> SUPABASE 연결 관리</div>
+    <button class="btn admin-exit-button" id="exitAdminDashboard" type="button">← 청취자 화면으로</button>
+  </div>
 </div>
 <div class="admin-summary-grid">
   <article class="admin-stat"><span>SONGBOOK</span><strong id="adminSongTotal">—</strong><small>등록된 노래</small></article>
@@ -590,6 +599,15 @@ async function verifyAdminSession(){if(!sb||PUBLIC_SITE)return;const {data}=awai
 
 function initAdminDashboard(){
  const page=document.querySelector('.page-view[data-page="admin"]');
+ const exitButton=$('exitAdminDashboard');
+ if(exitButton&&!exitButton.dataset.bound){
+   exitButton.dataset.bound='1';
+   exitButton.addEventListener('click',()=>{
+     view='all';filter='all';selectedArtist=null;
+     renderFilters();showPage('songs');render();
+     window.scrollTo({top:0,behavior:'smooth'});
+   });
+ }
  if(!page)return;if(page.dataset.dashboardReady){window.__guguSetAdminTab?.('inbox');return;}
  page.dataset.dashboardReady='1';
  const panels=[...page.querySelectorAll('[data-admin-panel]')];
